@@ -154,9 +154,11 @@ class OAuthController extends AppController
         try {
             return $this->OAuth->getServer()->respondToAccessTokenRequest($this->request, $this->response);
         } catch (OAuthServerException $e) {
-            // ignoring $e->getHttpHeaders() for now
-            // it only sends WWW-Authenticate header in case of InvalidClientException
-            throw new HttpException($e->getMessage(), $e->getHttpStatusCode(), $e);
+//            // ignoring $e->getHttpHeaders() for now
+//            // it only sends WWW-Authenticate header in case of InvalidClientException
+//            throw new HttpException($e->getMessage(), $e->getHttpStatusCode(), $e);
+            return $e->generateHttpResponse($this->response)
+                ->withHeader('Content-Type', 'application/json');
         }
     }
 }
